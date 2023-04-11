@@ -13,26 +13,13 @@ When you're ready to build, [open a sandbox environment](https://rizefs.com/get-
 
 For more information, check out our [Platform API Documentation](https://developer.rizefs.com/).
 
+### Supported iOS Versions
+
+The Rize iOS SDK is compatible with the two most recent, major iOS releases.
+
+We currently support **iOS v15 and higher**.
+
 ## Getting Started
-
-### Configure SwiftLint (optional)
-
-```sh
-$ brew install swiftlint
-
-# Set xcode-select path
-$ xcode-select -s /Applications/Xcode.app/Contents/Developer/
-```
-
-Add a new Run Script to the Build phase of the RizeSDK scheme:
-
-`Product Menu` > `Edit Scheme` > `Build` > `Pre-Action` > `Add` > `New Run Script Action` 
-
-```sh
-if which swiftlint > /dev/null; then
-  swiftlint
-fi
-```
 
 ### Configuration
 
@@ -46,6 +33,55 @@ You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.c
 | ProgramUID  | Program UID for the target environment | "" |
 | Environment | The Rize environment to be used:<br> `"sandbox"`, `"integration"` or `"production"` | "sandbox" |
 | Debug  | Enable debug logging | false |
+
+### Add a Dependency
+
+Add the Rize iOS SDK to your project using Swift Package Manager.
+
+```swift
+import RizeSDK
+
+struct Rize {
+	static var client: RizeSDK?
+	static var config = RizeConfig(
+		programUID: "PROGRAM_UID",
+		hmacKey: "HMAC_KEY",
+		environment: "sandbox"
+	)
+	init() {
+		client = RizeSDK(config: config)
+	}
+}
+```
+
+## Tests
+
+### Configure SwiftLint (optional)
+
+```sh
+$ brew install swiftlint
+
+# Set xcode-select path
+$ xcode-select -s /Applications/Xcode.app/Contents/Developer/
+```
+
+Add a new Run Script to the `Build` phase of the RizeSDK scheme:
+
+`Product Menu` > `Edit Scheme` > `Build` > `Pre-Action` > `Add` > `New Run Script Action` 
+
+```sh
+if which swiftlint > /dev/null; then
+  swiftlint
+fi
+```
+
+### Set Environment Variables
+
+The `RizeSDKTests` target requires the following environment variables to be set on the `Run` phase of the RizeSDK scheme. 
+
++ PROGRAM_UID
++ HMAC_KEY
++ ENVIRONMENT
 
 ## Documentation
 
