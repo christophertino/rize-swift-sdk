@@ -9,18 +9,25 @@ import XCTest
 
 final class RizeSDKTests: XCTestCase {
 	private static var client: RizeSDK?
-	private static var config = RizeConfig(
-		programUID: ProcessInfo.processInfo.environment["PROGRAM_UID"],
-		hmacKey: ProcessInfo.processInfo.environment["HMAC_KEY"],
-		environment: RizeEnvironments.Sandbox
-	)
+	private static var config: RizeConfig?
 
 	/// Set up any overall initial state for all test cases
 	override class func setUp() {
-		// Set target environment
-		config.baseURL = "https://\(config.environment).rizefs.com/"
+		do {
+			self.config = try RizeConfig(
+				programUID: ProcessInfo.processInfo.environment["PROGRAM_UID"],
+				hmacKey: ProcessInfo.processInfo.environment["HMAC_KEY"],
+				environment: RizeEnvironments.sandbox
+			)
+		} catch {
+			Utils.logger("RizeConfig error: \(error)")
+		}
 
-		client = RizeSDK(config: config)
+		// Set target environment
+		let baseURL = "https://\(self.config?.environment?.getEnv() ?? "sandbox").rizefs.com/"
+		self.config?.baseURL = baseURL
+
+		client = RizeSDK(config: self.config!)
 	}
 
 	func testRunner() throws {

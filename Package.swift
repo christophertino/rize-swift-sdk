@@ -20,6 +20,7 @@ let package = Package(
 		.target(
 			name: "RizeSDK",
 			dependencies: [],
+			swiftSettings: [.unsafeFlags(["-enable-testing"])], // For local testing only
 			plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]),
 		.testTarget(
 			name: "RizeSDKTests",
