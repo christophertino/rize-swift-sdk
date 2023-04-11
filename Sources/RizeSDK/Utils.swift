@@ -6,6 +6,7 @@
 
 import Foundation
 
+/// Shared utilities
 internal struct Utils {
 	/// Custom debug logging function
 	/// - Parameters:

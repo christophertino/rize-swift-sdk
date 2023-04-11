@@ -10,9 +10,9 @@ import XCTest
 final class RizeSDKTests: XCTestCase {
 	private static var client: RizeSDK?
 	private static var config = RizeConfig(
-		programUID: ProcessInfo.processInfo.environment["PROGRAM_UID"] ?? "",
-		hmacKey: ProcessInfo.processInfo.environment["HMAC_KEY"] ?? "",
-		environment: ProcessInfo.processInfo.environment["ENVIRONMENT"] ?? "sandbox"
+		programUID: ProcessInfo.processInfo.environment["PROGRAM_UID"],
+		hmacKey: ProcessInfo.processInfo.environment["HMAC_KEY"],
+		environment: RizeEnvironments.Sandbox
 	)
 
 	/// Set up any overall initial state for all test cases

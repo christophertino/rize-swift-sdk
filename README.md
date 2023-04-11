@@ -81,7 +81,6 @@ The `RizeSDKTests` target requires the following environment variables to be set
 
 + PROGRAM_UID
 + HMAC_KEY
-+ ENVIRONMENT
 
 ## Documentation
 
