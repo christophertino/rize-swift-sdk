@@ -1,0 +1,22 @@
+# Xcode
+build/
+DerivedData/
+/*.xcodeproj
+
+# User settings
+xcuserdata/
+*.xcuserstate
+*.xcworkspace/
+
+# Swift Package Manager
+Packages/
+Package.pins
+Package.resolved
+.swiftpm/
+.netrc
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+.DS_Store
