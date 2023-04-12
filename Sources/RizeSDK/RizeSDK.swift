@@ -16,10 +16,10 @@ public struct RizeSDK {
 		Utils.logger("Creating client...")
 
 		// Initialize API Services
-		self.auth = Auth()
+		self.auth = Auth(config: self.config)
 		self.customers = Customers()
 
 		// Generate Auth Token
-		
+		self.auth.getToken()
 	}
 }
