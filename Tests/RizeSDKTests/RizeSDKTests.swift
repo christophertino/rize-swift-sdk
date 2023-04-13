@@ -23,10 +23,6 @@ final class RizeSDKTests: XCTestCase {
 			Utils.logger("RizeConfig error: \(error)")
 		}
 
-		// Set target environment
-		let baseURL = "https://\(self.config?.environment?.getEnv() ?? "sandbox").rizefs.com/"
-		self.config?.baseURL = baseURL
-
 		client = RizeSDK(config: self.config!)
 	}
 

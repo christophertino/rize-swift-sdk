@@ -32,11 +32,14 @@ You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.c
 | HMACKey     | HMAC key for the target environment | "" |
 | ProgramUID  | Program UID for the target environment | "" |
 | Environment | The Rize environment to be used:<br> `"sandbox"`, `"integration"` or `"production"` | "sandbox" |
-| Debug  | Enable debug logging | false |
 
-### Add a Dependency
+### Add the SDK as a Package Dependency
 
 Add the Rize iOS SDK to your project using Swift Package Manager.
+
+`.package(url: "https://github.com/RizeFinance/rize-ios-sdk", from: "1.0.0")`
+
+### Import and Initialize
 
 ```swift
 import RizeSDK

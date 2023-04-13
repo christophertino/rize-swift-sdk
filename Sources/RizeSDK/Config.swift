@@ -4,12 +4,15 @@
 // Copyright 2023-Present Rize Money, Inc. All rights reserved.
 //
 
+import Foundation
+
 /// RizeConfig stores Rize configuration values
 public struct RizeConfig {
 	public var programUID: String?
 	public var hmacKey: String?
 	public var environment: RizeEnvironments?
-	public var baseURL = "https://sandbox.rizefs.com/"
+	public var baseURL: String?
+	public var userAgent: String
 
 	// Validate client config properties
 	public init(programUID: String?, hmacKey: String?, environment: RizeEnvironments?) throws {
@@ -29,6 +32,11 @@ public struct RizeConfig {
 			return
 		}
 		self.environment = environment
+		self.baseURL = "https://\(self.environment?.getEnv() ?? "sandbox").rizefs.com/"
+
+		let version = ProcessInfo.processInfo.operatingSystemVersion
+		let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+		self.userAgent = String(format: "%@/%@ (OS Version: %@)", "rize-swift-sdk", Constants().SDK_VERSION, versionString)
 	}
 }
 

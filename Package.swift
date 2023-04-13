@@ -27,5 +27,6 @@ let package = Package(
 			name: "RizeSDKTests",
 			dependencies: ["RizeSDK"],
 			plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")])
-	]
+	],
+	swiftLanguageVersions: [SwiftVersion.v5]
 )
