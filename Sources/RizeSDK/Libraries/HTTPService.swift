@@ -6,6 +6,14 @@
 
 import Foundation
 
+/// Custom error for HTTPService
+public enum HTTPServiceError: Error {
+	case apiError
+	case decodeError
+	case invalidEndpoint
+	case invalidResponse
+}
+
 /// Provides methods for making HTTP requests
 public struct HTTPService {
 	/// Make the API request and return a response. Checks for valid auth token.
@@ -14,9 +22,9 @@ public struct HTTPService {
 			"Accept": "application/json",
 			"Content-Type": "application/json",
 			"User-Agent": RizeSDK.config!.userAgent,
-			"Authorization": ""
+			"Authorization": TokenCache.shared.token ?? ""
 		]
-		let url = URL(string: String(format: "%@/%@/%@", RizeSDK.config!.baseURL!, Constants().BASE_PATH, path))
+		let url = URL(string: String(format: "%@/%@/%@", RizeSDK.config!.baseURL, Constants().basePath, path))
 		var request = URLRequest(url: url!)
 		request.httpMethod = method
 		request.allHTTPHeaderFields = headers
@@ -26,16 +34,8 @@ public struct HTTPService {
 			if let data = data {
 				completion(.success(data))
 			} else if let error = error {
-				completion(.failure(error as! HTTPServiceError))
+				completion(.failure(.apiError))
 			}
 		}).resume()
 	}
-}
-
-/// Custom error for HTTPService
-public enum HTTPServiceError: Error {
-	case apiError
-	case decodeError
-	case invalidEndpoint
-	case invalidResponse
 }

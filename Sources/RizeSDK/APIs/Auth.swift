@@ -15,25 +15,47 @@ private struct JWTClaims: Claims {
 
 /// AuthTokenResponse is the response format received when fetching an Auth token
 private struct AuthTokenResponse: Decodable {
-	let Token: String
+	let token: String
+}
+
+// TokenCache stores Auth token data
+internal struct TokenCache {
+	var token: String?
+	var timestamp: Int64?
+	static var shared = TokenCache(token: nil, timestamp: nil)
 }
 
 public struct Auth {
 	/// GetToken generates an authorization token if the existing token is expired or not found.
 	/// Otherwise, it will return the existing active token,
 	public func getToken() {
-		let refreshToken: String?
-		do {
-			refreshToken = try buildRefreshToken()
-		} catch {
-			Utils.logger("Error building refresh token: \(error.localizedDescription)")
-			return
+		if TokenCache.shared.token.isEmptyOrNil {
+			Utils.logger("Token is expired or does not exist. Fetching new token...")
+
+			do {
+				let refreshToken = try buildRefreshToken()
+				TokenCache.shared.token = refreshToken
+			} catch {
+				Utils.logger("Error building refresh token: \(error.localizedDescription)")
+				return
+			}
+
+			HTTPService.doRequest(method: "POST", path: "auth", query: nil, body: nil) { result in
+				switch result {
+					case .success(let data):
+						if let response = try? JSONDecoder().decode([AuthTokenResponse].self, from: data) {
+							Utils.logger("Token response \(response)")
+							// Validate token exists
+							
+							//  Save token to cache. Auth token is valid for 24hrs
+						} else {
+							// error
+						}
+					case .failure(let error):
+						print(error.localizedDescription)
+				}
+			}
 		}
-
-		HTTPService.doRequest(method: <#T##String#>, path: <#T##String#>, query: <#T##String?#>, body: <#T##Data?#>, completion: <#T##(Result<Decodable, Error>) -> Void#>)
-
-		Utils.logger(refreshToken)
-		
 	}
 
 	/// Generates a JWT refresh token

@@ -1,0 +1,5 @@
+# SwiftLint Config
+disabled_rules:
+  - line_length
+  - switch_case_alignment
+  - unused_closure_parameter

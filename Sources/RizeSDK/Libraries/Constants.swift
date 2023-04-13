@@ -5,6 +5,6 @@
 //
 
 internal struct Constants {
-	let BASE_PATH = "api/v1"
-	let SDK_VERSION = "1.1.0"
+	let basePath = "api/v1"
+	let SDKVersion = "1.1.0"
 }
