@@ -20,8 +20,5 @@ public struct RizeSDK {
 		// Initialize API Services
 		self.auth = Auth()
 		self.customers = Customers()
-
-		// Generate Auth Token
-		self.auth.getToken()
 	}
 }

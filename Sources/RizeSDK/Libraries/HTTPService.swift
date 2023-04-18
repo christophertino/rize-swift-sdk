@@ -14,10 +14,25 @@ public enum HTTPServiceError: Error {
 	case invalidResponse
 }
 
+struct RizeAPIError: Codable {
+	let errors: [ErrorDetails]
+	let status: Int
+}
+
+struct ErrorDetails: Codable {
+	let code: Int
+	let title, detail, occurredAt: String
+
+	enum CodingKeys: String, CodingKey {
+		case code, title, detail
+		case occurredAt = "occurred_at"
+	}
+}
+
 /// Provides methods for making HTTP requests
 public struct HTTPService {
 	/// Make the API request and return a response. Checks for valid auth token.
-	public static func doRequest(method: String, path: String, query: String?, body: Data?, completion: @escaping (Result<Data, HTTPServiceError>) -> Void) {
+	public static func doRequest(method: String, path: String, query: String?, body: Data?) async throws -> Data {
 		let headers = [
 			"Accept": "application/json",
 			"Content-Type": "application/json",
@@ -30,12 +45,13 @@ public struct HTTPService {
 		request.allHTTPHeaderFields = headers
 		request.httpBody = body
 
-		URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
-			if let data = data {
-				completion(.success(data))
-			} else if let error = error {
-				completion(.failure(.apiError))
-			}
-		}).resume()
+		let (data, response) = try await URLSession.shared.data(for: request)
+		guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200, httpResponse.statusCode < 400 else {
+			let err = try? JSONDecoder().decode(RizeAPIError.self, from: data)
+			Utils.logger("doRequest error response:\n \(String(describing: err))")
+			throw HTTPServiceError.invalidResponse
+		}
+
+		return data
 	}
 }

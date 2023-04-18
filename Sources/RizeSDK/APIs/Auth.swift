@@ -7,14 +7,8 @@
 import SwiftJWT
 import Foundation
 
-/// JWTClaims for generating a JWT token
-private struct JWTClaims: Claims {
-	let iat: Date
-	let sub: String
-}
-
 /// AuthTokenResponse is the response format received when fetching an Auth token
-private struct AuthTokenResponse: Decodable {
+public struct AuthTokenResponse: Decodable {
 	let token: String
 }
 
@@ -25,37 +19,35 @@ internal struct TokenCache {
 	static var shared = TokenCache(token: nil, timestamp: nil)
 }
 
+/// JWTClaims for generating a JWT token
+private struct JWTClaims: Claims {
+	let iat: Date
+	let sub: String
+}
+
 public struct Auth {
 	/// GetToken generates an authorization token if the existing token is expired or not found.
 	/// Otherwise, it will return the existing active token,
-	public func getToken() {
+	public func getToken() async throws -> AuthTokenResponse? {
 		if TokenCache.shared.token.isEmptyOrNil {
 			Utils.logger("Token is expired or does not exist. Fetching new token...")
 
-			do {
-				let refreshToken = try buildRefreshToken()
-				TokenCache.shared.token = refreshToken
-			} catch {
-				Utils.logger("Error building refresh token: \(error.localizedDescription)")
-				return
-			}
+			let refreshToken = try buildRefreshToken()
+			TokenCache.shared.token = refreshToken
 
-			HTTPService.doRequest(method: "POST", path: "auth", query: nil, body: nil) { result in
-				switch result {
-					case .success(let data):
-						if let response = try? JSONDecoder().decode([AuthTokenResponse].self, from: data) {
-							Utils.logger("Token response \(response)")
-							// Validate token exists
-							
-							//  Save token to cache. Auth token is valid for 24hrs
-						} else {
-							// error
-						}
-					case .failure(let error):
-						print(error.localizedDescription)
-				}
+			let data = try await HTTPService.doRequest(method: "POST", path: "auth", query: nil, body: nil)
+			let response = try? JSONDecoder().decode(AuthTokenResponse.self, from: data)
+
+			// Validate token exists
+			if response?.token != nil {
+				//  Save token to cache. Auth token is valid for 24hrs
+				TokenCache.shared.token = response?.token
+				TokenCache.shared.timestamp = Int64(Date().timeIntervalSince1970)
+				return response
 			}
+			return nil
 		}
+		return AuthTokenResponse(token: TokenCache.shared.token!)
 	}
 
 	/// Generates a JWT refresh token
@@ -66,6 +58,7 @@ public struct Auth {
 		let jwtSigner = JWTSigner.hs512(key: (RizeSDK.config?.hmacKey?.data(using: .utf8))!)
 		var jwt = JWT(claims: claims)
 		guard let signedJWT = try? jwt.sign(using: jwtSigner) else {
+			Utils.logger("Error building refresh token")
 			throw JWTError.invalidJWTString
 		}
 
