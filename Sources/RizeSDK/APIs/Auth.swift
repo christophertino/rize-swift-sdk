@@ -7,12 +7,17 @@
 import SwiftJWT
 import Foundation
 
+/// Custom error for AuthService
+public enum AuthServiceError: Error {
+	case nilToken
+}
+
 /// AuthTokenResponse is the response format received when fetching an Auth token
 public struct AuthTokenResponse: Decodable {
 	let token: String
 }
 
-// TokenCache stores Auth token data
+/// TokenCache stores Auth token data
 internal struct TokenCache {
 	var token: String?
 	var timestamp: Int64?
@@ -27,25 +32,27 @@ private struct JWTClaims: Claims {
 
 public struct Auth {
 	/// GetToken generates an authorization token if the existing token is expired or not found.
-	/// Otherwise, it will return the existing active token,
-	public func getToken() async throws -> AuthTokenResponse? {
-		if TokenCache.shared.token.isEmptyOrNil {
+	/// - Returns: AuthTokenResponse
+	internal func getToken() async throws -> AuthTokenResponse? {
+		if TokenCache.shared.token.isEmptyOrNil || isExpired() {
 			Utils.logger("Token is expired or does not exist. Fetching new token...")
 
 			let refreshToken = try buildRefreshToken()
 			TokenCache.shared.token = refreshToken
 
-			let data = try await HTTPService.doRequest(method: "POST", path: "auth", query: nil, body: nil)
+			let data = try await HTTPService().doRequest(method: "POST", path: "auth", query: nil, body: nil)
 			let response = try? JSONDecoder().decode(AuthTokenResponse.self, from: data)
 
 			// Validate token exists
-			if response?.token != nil {
-				//  Save token to cache. Auth token is valid for 24hrs
-				TokenCache.shared.token = response?.token
-				TokenCache.shared.timestamp = Int64(Date().timeIntervalSince1970)
-				return response
+			guard let token = response?.token else {
+				Utils.logger("Token is nil")
+				throw AuthServiceError.nilToken
 			}
-			return nil
+
+			// Save token to cache. Auth token is valid for 24hrs
+			TokenCache.shared.token = token
+			TokenCache.shared.timestamp = Int64(Date().timeIntervalSince1970)
+			return response
 		}
 		return AuthTokenResponse(token: TokenCache.shared.token!)
 	}
@@ -63,5 +70,16 @@ public struct Auth {
 		}
 
 		return signedJWT
+	}
+
+	/// Checks to see if the current Auth token should be refreshed
+	/// - Returns: Bool
+	private func isExpired() -> Bool {
+		let currentTime = Int64(Date().timeIntervalSince1970)
+		let cache = TokenCache.shared
+		guard let timestamp = cache.timestamp, (currentTime - timestamp) > Constants().tokenMaxAge else {
+			return false
+		}
+		return true
 	}
 }

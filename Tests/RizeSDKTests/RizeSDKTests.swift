@@ -1,5 +1,5 @@
 //
-// RizeSDKTests - Package Test Runner
+// RizeSDKTests - XCTestCase Superclass
 //
 // Copyright 2023-Present Rize Money, Inc. All rights reserved.
 //
@@ -7,9 +7,9 @@
 import XCTest
 @testable import RizeSDK
 
-final class RizeSDKTests: XCTestCase {
-	private static var client: RizeSDK?
-	private static var config: RizeConfig?
+internal class RizeSDKTests: XCTestCase {
+	internal static var client: RizeSDK?
+	internal static var config: RizeConfig?
 
 	/// Set up initial state for all test cases
 	override class func setUp() {
@@ -24,17 +24,5 @@ final class RizeSDKTests: XCTestCase {
 		}
 
 		client = RizeSDK(config: self.config!)
-	}
-
-	func testAuth() async {
-		do {
-			let response = try await RizeSDKTests.client?.auth.getToken()
-			XCTAssertNotNil(response?.token)
-		} catch {
-			Utils.logger(error.localizedDescription)
-		}
-	}
-
-	func testRunner() throws {
 	}
 }

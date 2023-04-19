@@ -31,8 +31,13 @@ struct ErrorDetails: Codable {
 
 /// Provides methods for making HTTP requests
 public struct HTTPService {
-	/// Make the API request and return a response. Checks for valid auth token.
-	public static func doRequest(method: String, path: String, query: String?, body: Data?) async throws -> Data {
+	/// Make the API request and return response data
+	public func doRequest(method: String, path: String, query: String?, body: Data?) async throws -> Data {
+		// Check for valid auth token and refresh if necessary
+		if path != "auth" {
+			_ = try await Auth().getToken()
+		}
+
 		let headers = [
 			"Accept": "application/json",
 			"Content-Type": "application/json",
