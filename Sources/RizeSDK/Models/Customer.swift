@@ -62,18 +62,20 @@ public struct CustomerProfileResponse: Codable {
 }
 
 public struct CustomerListParams: Encodable {
-	let uid,
-		status,
-		kyc_status,
-		customer_type,
-		first_name,
-		last_name,
-		email,
-		program_uid,
-		business_name,
-		external_uid,
-		pool_uid,
-		sort: String?
-	let locked, include_initiated: Bool?
-	let limit, offset: Int?
+	var uid: String? = nil
+	var status: String? = nil
+	var kyc_status: String? = nil
+	var customer_type: String? = nil
+	var first_name: String? = nil
+	var last_name: String? = nil
+	var email: String? = nil
+	var program_uid: String? = nil
+	var business_name: String? = nil
+	var external_uid: String? = nil
+	var pool_uid: String? = nil
+	var sort: String? = nil
+	var locked: Bool? = nil
+	var include_initiated: Bool? = nil
+	var limit: Int? = nil
+	var offset: Int? = nil
 }

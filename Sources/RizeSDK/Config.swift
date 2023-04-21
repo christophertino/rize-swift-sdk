@@ -59,7 +59,7 @@ public struct RizeConfig {
 			self.environment = environment
 		}
 
-		self.baseURL = "https://\(self.environment?.getEnv() ?? "sandbox").rizefs.com"
+		self.baseURL = "\(self.environment?.getEnv() ?? "sandbox").rizefs.com"
 
 		let version = ProcessInfo.processInfo.operatingSystemVersion
 		let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
