@@ -12,11 +12,6 @@ public enum AuthServiceError: Error {
 	case nilToken
 }
 
-/// AuthTokenResponse is the response format received when fetching an Auth token
-public struct AuthTokenResponse: Decodable {
-	let token: String
-}
-
 /// TokenCache stores Auth token data
 internal struct TokenCache {
 	var token: String?
@@ -32,8 +27,8 @@ private struct JWTClaims: Claims {
 
 public struct Auth {
 	/// GetToken generates an authorization token if the existing token is expired or not found.
-	/// - Returns: AuthTokenResponse
-	internal func getToken() async throws -> AuthTokenResponse? {
+	/// - Returns: AuthToken
+	internal func getToken() async throws -> AuthToken? {
 		if TokenCache.shared.token.isEmptyOrNil || isExpired() {
 			Utils.logger("Token is expired or does not exist. Fetching new token...")
 
@@ -41,7 +36,7 @@ public struct Auth {
 			TokenCache.shared.token = refreshToken
 
 			let data = try await HTTPService().doRequest(method: "POST", path: "auth", query: nil, body: nil)
-			let response = try? JSONDecoder().decode(AuthTokenResponse.self, from: data)
+			let response = try? JSONDecoder().decode(AuthToken.self, from: data)
 
 			// Validate token exists
 			guard let token = response?.token else {
@@ -54,7 +49,7 @@ public struct Auth {
 			TokenCache.shared.timestamp = Int64(Date().timeIntervalSince1970)
 			return response
 		}
-		return AuthTokenResponse(token: TokenCache.shared.token!)
+		return AuthToken(token: TokenCache.shared.token!)
 	}
 
 	/// Generates a JWT refresh token

@@ -14,12 +14,14 @@ public enum HTTPServiceError: Error {
 	case invalidResponse
 }
 
-struct RizeAPIError: Codable {
+/// Default API error type
+internal struct RizeAPIError: Codable {
 	let errors: [ErrorDetails]
 	let status: Int
 }
 
-struct ErrorDetails: Codable {
+// Error detail JSON
+internal struct ErrorDetails: Codable {
 	let code: Int
 	let title, detail, occurredAt: String
 
@@ -32,7 +34,7 @@ struct ErrorDetails: Codable {
 /// Provides methods for making HTTP requests
 public struct HTTPService {
 	/// Make the API request and return response data
-	public func doRequest(method: String, path: String, query: String?, body: Data?) async throws -> Data {
+	public func doRequest(method: String, path: String, query: [URLQueryItem]?, body: Data?) async throws -> Data {
 		// Check for valid auth token and refresh if necessary
 		if path != "auth" {
 			_ = try await Auth().getToken()
@@ -44,8 +46,14 @@ public struct HTTPService {
 			"User-Agent": RizeSDK.config!.userAgent,
 			"Authorization": TokenCache.shared.token ?? ""
 		]
-		let url = URL(string: String(format: "%@/%@/%@", RizeSDK.config!.baseURL, Constants().basePath, path))
-		var request = URLRequest(url: url!)
+
+		var components = URLComponents()
+		components.scheme = "https"
+		components.host = RizeSDK.config!.baseURL
+		components.path = String(format: "%@/%@", Constants().basePath, path)
+		components.queryItems = query
+
+		var request = URLRequest(url: components.url!)
 		request.httpMethod = method
 		request.allHTTPHeaderFields = headers
 		request.httpBody = body

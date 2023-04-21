@@ -5,9 +5,9 @@
   <br />
 </p>
 
-# Rize iOS Swift SDK
+# Rize Swift SDK
 
-Rize makes financial services simple and accessible by enabling fintechs, financial institutions and brands to build across multiple account types with one API. The Rize iOS SDK enables access to all platform services in our sandbox, integration and production environments.
+Rize makes financial services simple and accessible by enabling fintechs, financial institutions and brands to build across multiple account types with one API. The Rize Swift SDK enables access to all platform services in our sandbox, integration and production environments.
 
 When you're ready to build, [open a sandbox environment](https://rizefs.com/get-access/). If you have questions, feedback, or a use case you want to discuss with us, contact us at [hello@rizemoney.com](mailto:hello@rizemoney.com).
 
@@ -15,7 +15,7 @@ For more information, check out our [Platform API Documentation](https://develop
 
 ### Supported iOS Versions
 
-The Rize iOS SDK is compatible with the two most recent, major iOS releases.
+The Rize Swift SDK is compatible with the two most recent, major iOS releases.
 
 We currently support **iOS v15 and higher**.
 
@@ -35,9 +35,9 @@ You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.c
 
 ### Add the SDK as a Package Dependency
 
-Add the Rize iOS SDK to your project using Swift Package Manager.
+Add the Rize Swift SDK to your project using Swift Package Manager.
 
-`.package(url: "https://github.com/RizeFinance/rize-ios-sdk", from: "1.0.0")`
+`.package(url: "https://github.com/RizeFinance/rize-swift-sdk", from: "1.0.0")`
 
 ### Import and Initialize
 
