@@ -12,6 +12,8 @@ public enum HTTPServiceError: Error {
 	case decodeError
 	case invalidEndpoint
 	case invalidResponse
+	case invalidQueryParameters
+	case invalidBodyParameters
 }
 
 /// Default API error type
