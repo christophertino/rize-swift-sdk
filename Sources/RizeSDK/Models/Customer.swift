@@ -4,6 +4,8 @@
 // Copyright 2023-Present Rize Money, Inc. All rights reserved.
 //
 
+import Foundation
+
 /// Default 'List' endpoint response.
 public struct CustomerList: Decodable {
 	let total_count, count, limit, offset: Int
@@ -14,25 +16,25 @@ public struct CustomerList: Decodable {
 public struct Customer: Decodable {
 	let uid,
 		external_uid,
-		activated_at,
-		created_at,
 		customer_type,
 		email,
 		kyc_status,
 		lock_reason,
-		locked_at,
-		pii_confirmed_at,
 		primary_customer_uid,
 		program_uid,
 		status,
 		total_balance: String?
-	let poolUids, kyc_status_reasons, secondary_customer_uids: [String?]
+	let activated_at,
+		created_at,
+		locked_at,
+		pii_confirmed_at: Date?
+	let poolUids, kyc_status_reasons, secondary_customer_uids: [String]?
 	let details: CustomerDetails?
-	let profile_responses: [CustomerProfileResponse?]
+	let profile_responses: [CustomerProfileResponse]?
 }
 
 /// CustomerDetails is an object containing the supplied identifying information for the Customer
-public struct CustomerDetails: Decodable {
+public struct CustomerDetails: Codable {
 	let first_name,
 		middle_name,
 		last_name,
@@ -79,4 +81,38 @@ public struct CustomerListParams: Encodable {
 	var include_initiated: Bool? = nil
 	var limit: Int? = nil
 	var offset: Int? = nil
+}
+
+/// CustomerCreateParams are the body params used when creating a new Customer
+public struct CustomerCreateParams: Encodable {
+	var customer_type: String? = nil
+	var primary_customer_uid: String? = nil
+	var external_uid: String? = nil
+	var email: String? = nil
+	var details: CustomerDetails? = nil
+}
+
+/// CustomerUpdateParams are the body params used when updating a Customer
+public struct CustomerUpdateParams: Encodable {
+	var email: String? = nil
+	var details: CustomerDetails? = nil
+	var external_uid: String? = nil
+}
+
+/// CustomerDeleteParams are the body params used when deleting/archiving a Customer
+public struct CustomerDeleteParams: Encodable {
+	var archive_note: String? = nil
+}
+
+/// CustomerLockParams are the body params used when locking/unlocking a Customer
+public struct CustomerLockParams: Encodable {
+	var lock_note: String? = nil
+	var lock_reason: String? = nil
+	var unlock_reason: String? = nil
+}
+
+/// CustomerProfileResponseParams are the body params used when updating Customer Profile responses
+public struct CustomerProfileResponseParams: Encodable {
+	var profile_requirement_uid: String? = nil
+	var profile_response: String? = nil
 }
