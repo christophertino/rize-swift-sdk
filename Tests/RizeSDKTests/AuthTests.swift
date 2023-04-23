@@ -7,7 +7,7 @@
 import XCTest
 @testable import RizeSDK
 
-final class Auth: RizeSDKTests {
+final class AuthTests: RizeSDKTests {
 	func testGetToken() async {
 		do {
 			let response = try await RizeSDKTests.client?.auth.getToken()

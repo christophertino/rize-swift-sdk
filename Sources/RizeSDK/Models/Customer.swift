@@ -11,7 +11,7 @@ public struct CustomerList: Decodable {
 }
 
 /// Customer data type
-public struct Customer: Codable {
+public struct Customer: Decodable {
 	let uid,
 		external_uid,
 		activated_at,
@@ -32,7 +32,7 @@ public struct Customer: Codable {
 }
 
 /// CustomerDetails is an object containing the supplied identifying information for the Customer
-public struct CustomerDetails: Codable {
+public struct CustomerDetails: Decodable {
 	let first_name,
 		middle_name,
 		last_name,
@@ -46,7 +46,7 @@ public struct CustomerDetails: Codable {
 }
 
 /// CustomerAddress information
-public struct CustomerAddress: Codable {
+public struct CustomerAddress: Decodable {
 	let street1,
 		street2,
 		city,
@@ -55,12 +55,13 @@ public struct CustomerAddress: Codable {
 }
 
 /// CustomerProfileResponse contains Profile Response info
-public struct CustomerProfileResponse: Codable {
+public struct CustomerProfileResponse: Decodable {
 	let profile_requirement,
 		profile_requirement_uid,
 		profile_response: String?
 }
 
+/// CustomerListParams builds the query parameters used in querying Customers
 public struct CustomerListParams: Encodable {
 	var uid: String? = nil
 	var status: String? = nil

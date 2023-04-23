@@ -25,7 +25,7 @@ private struct JWTClaims: Claims {
 	let sub: String
 }
 
-public struct Auth {
+internal struct Auth {
 	/// GetToken generates an authorization token if the existing token is expired or not found.
 	/// - Returns: AuthToken
 	internal func getToken() async throws -> AuthToken? {

@@ -7,12 +7,12 @@
 import XCTest
 @testable import RizeSDK
 
-final class Customers: RizeSDKTests {
+final class CustomerTests: RizeSDKTests {
 	func testList() async {
 		do {
 			let params = CustomerListParams(
-				customer_type: "primary",
-				email: "olive.oyl@rizemoney.com"
+				limit: 20,
+				offset: 0
 			)
 			let response = try await RizeSDKTests.client?.customers.list(query: params)
 			XCTAssertNotNil(response?.count)

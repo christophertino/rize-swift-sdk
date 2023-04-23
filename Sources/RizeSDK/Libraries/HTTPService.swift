@@ -15,13 +15,13 @@ public enum HTTPServiceError: Error {
 }
 
 /// Default API error type
-internal struct RizeAPIError: Codable {
+internal struct RizeAPIError: Decodable {
 	let errors: [ErrorDetails]
 	let status: Int
 }
 
-// Error detail JSON
-internal struct ErrorDetails: Codable {
+/// Error detail JSON
+internal struct ErrorDetails: Decodable {
 	let code: Int
 	let title, detail, occurredAt: String
 
@@ -32,9 +32,9 @@ internal struct ErrorDetails: Codable {
 }
 
 /// Provides methods for making HTTP requests
-public struct HTTPService {
+internal struct HTTPService {
 	/// Make the API request and return response data
-	public func doRequest(method: String, path: String, query: [URLQueryItem]?, body: Data?) async throws -> Data {
+	internal func doRequest(method: String, path: String, query: [URLQueryItem]?, body: Data?) async throws -> Data {
 		// Check for valid auth token and refresh if necessary
 		if path != "auth" {
 			_ = try await Auth().getToken()

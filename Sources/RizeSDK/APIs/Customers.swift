@@ -6,9 +6,9 @@
 
 import Foundation
 
-public struct Customers {
+internal struct Customers {
 	/// List retrieves a list of Customers filtered by the given parameters
-	public func list(query: CustomerListParams) async throws -> CustomerList? {
+	internal func list(query: CustomerListParams) async throws -> CustomerList? {
 		let params = query.encodeURLQueryItem
 		let data = try await HTTPService().doRequest(method: "GET", path: "customers", query: params, body: nil)
 		let response = try? JSONDecoder().decode(CustomerList.self, from: data)

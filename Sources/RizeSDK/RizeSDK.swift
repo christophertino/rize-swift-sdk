@@ -8,9 +8,9 @@ import Foundation
 
 /// RizeSDK is the top-level client containing all APIs and configurations
 public struct RizeSDK {
-	public private(set) static var config: RizeConfig?
-	public var auth: Auth
-	public var customers: Customers
+	internal private(set) static var config: RizeConfig?
+	internal var auth: Auth
+	internal var customers: Customers
 
 	public init(config: RizeConfig) {
 		RizeSDK.config = config

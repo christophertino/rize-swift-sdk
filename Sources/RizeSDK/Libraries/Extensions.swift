@@ -6,13 +6,13 @@
 
 import Foundation
 
-extension Optional where Wrapped: Collection {
+internal extension Optional where Wrapped: Collection {
 	var isEmptyOrNil: Bool {
 		return self?.isEmpty ?? true
 	}
 }
 
-extension Encodable {
+internal extension Encodable {
 	/// Convert encodable struct to dictionary
 	var dictionary: [String: Any?]? {
 		guard let data = try? JSONEncoder().encode(self) else {
@@ -22,7 +22,7 @@ extension Encodable {
 			$0 as? [String: Any?]
 		}
 	}
-	// Convert encodable struct to URLQueryItem list
+	/// Convert encodable struct to URLQueryItem list
 	var encodeURLQueryItem: [URLQueryItem]? {
 		let destination = self.dictionary?.filter({ $0.value != nil}).reduce(into: [URLQueryItem]()) { (result, item) in
 			if let collection = item.value as? [Any?] {
