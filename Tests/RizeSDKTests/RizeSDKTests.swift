@@ -15,9 +15,9 @@ internal class RizeSDKTests: XCTestCase {
 	override class func setUp() {
 		do {
 			self.config = try RizeConfig(
-				programUID: ProcessInfo.processInfo.environment["PROGRAM_UID"],
-				hmacKey: ProcessInfo.processInfo.environment["HMAC_KEY"],
-				environment: RizeEnvironments.sandbox
+				programUID: ProcessInfo.processInfo.environment["PROGRAM_UID"] ?? "programUID",
+				hmacKey: ProcessInfo.processInfo.environment["HMAC_KEY"] ?? "hmacKey",
+				environment: RizeEnvironments.local
 			)
 		} catch {
 			Utils.logger("RizeConfig error: \(error)")

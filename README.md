@@ -78,12 +78,11 @@ if which swiftlint > /dev/null; then
 fi
 ```
 
-### Set Environment Variables
+### Run Mock Server API
 
-The `RizeSDKTests` target requires the following environment variables to be set on the `Run` phase of the RizeSDK scheme. 
+The SDK uses [Prism](https://docs.stoplight.io/docs/prism) as a mock server for validation testing. You must start the Docker container before running the SDK tests.
 
-+ PROGRAM_UID
-+ HMAC_KEY
+`docker compose up`
 
 ## Documentation
 

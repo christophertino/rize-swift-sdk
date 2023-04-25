@@ -55,6 +55,13 @@ internal struct HTTPService {
 		components.path = String(format: "%@/%@", Constants().basePath, path)
 		components.queryItems = query
 
+		if RizeSDK.config?.environment == RizeEnvironments.local {
+			components.scheme = "http"
+			components.host = "0.0.0.0"
+			components.port = 4010
+			components.path = String(format: "/%@", path)
+		}
+
 		var request = URLRequest(url: components.url!)
 		request.httpMethod = method
 		request.allHTTPHeaderFields = headers

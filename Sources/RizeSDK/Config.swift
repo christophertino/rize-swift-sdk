@@ -15,12 +15,15 @@ public enum ConfigError: Error {
 
 /// RizeEnvironments lists the development and production environments available to Rize clients.
 public enum RizeEnvironments {
+	case local
 	case sandbox
 	case integration
 	case production
 
 	func getEnv() -> String {
 		switch self {
+			case .local:
+				return "localhost"
 			case .sandbox:
 				return "sandbox"
 			case .integration:
