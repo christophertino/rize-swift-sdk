@@ -3,13 +3,14 @@
 //
 // Copyright 2023-Present Rize Money, Inc. All rights reserved.
 //
+// swiftlint:disable identifier_name redundant_optional_initialization
 
 import Foundation
 
 /// Default 'List' endpoint response.
 public struct CustomerList: Decodable {
 	let total_count, count, limit, offset: Int
-	let data: [Customer?]
+	let data: [Customer]?
 }
 
 /// Customer data type
@@ -35,32 +36,32 @@ public struct Customer: Decodable {
 
 /// CustomerDetails is an object containing the supplied identifying information for the Customer
 public struct CustomerDetails: Codable {
-	let first_name,
-		middle_name,
-		last_name,
-		suffix,
-		phone,
-		business_name,
-		dob,
-		ssn,
-		ssn_last_four,
-		address: String?
+	var first_name: String? = nil
+	var	middle_name: String? = nil
+	var	last_name: String? = nil
+	var	suffix: String? = nil
+	var	phone: String? = nil
+	var	business_name: String? = nil
+	var	dob: String? = nil
+	var	ssn: String? = nil
+	var ssn_last_four: String? = nil
+	var address: CustomerAddress? = nil
 }
 
 /// CustomerAddress information
-public struct CustomerAddress: Decodable {
-	let street1,
-		street2,
-		city,
-		state,
-		postal_code: String?
+public struct CustomerAddress: Codable {
+	var street1: String? = nil
+	var	street2: String? = nil
+	var	city: String? = nil
+	var	state: String? = nil
+	var	postal_code: String? = nil
 }
 
 /// CustomerProfileResponse contains Profile Response info
-public struct CustomerProfileResponse: Decodable {
-	let profile_requirement,
-		profile_requirement_uid,
-		profile_response: String?
+public struct CustomerProfileResponse: Codable {
+	var profile_requirement: String? = nil
+	var	profile_requirement_uid: String? = nil
+	var	profile_response: String? = nil
 }
 
 /// CustomerListParams builds the query parameters used in querying Customers
@@ -116,3 +117,5 @@ public struct CustomerProfileResponseParams: Encodable {
 	var profile_requirement_uid: String? = nil
 	var profile_response: String? = nil
 }
+
+// swiftlint:enable identifier_name redundant_optional_initialization

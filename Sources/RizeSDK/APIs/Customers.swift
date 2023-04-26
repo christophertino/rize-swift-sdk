@@ -7,13 +7,19 @@
 import Foundation
 
 internal struct Customers {
+	private let decoder = JSONDecoder()
+
+	internal init() {
+		self.decoder.dateDecodingStrategy = .formatted(Formatter.iso8601)
+	}
+
 	/// Retrieves a list of Customers filtered by the given parameters
 	/// - Parameter query: CustomerListParams
 	/// - Returns: CustomerList
 	internal func list(query: CustomerListParams) async throws -> CustomerList? {
 		let params = query.encodeURLQueryItem
 		let data = try await HTTPService().doRequest(method: "GET", path: "customers", query: params, body: nil)
-		let response = try? JSONDecoder().decode(CustomerList.self, from: data)
+		let response = try self.decoder.decode(CustomerList.self, from: data!)
 		return response
 	}
 
@@ -23,13 +29,12 @@ internal struct Customers {
 	/// - Returns: Customer
 	internal func create(body: CustomerCreateParams) async throws -> Customer? {
 		if body.customer_type == "secondary" && body.primary_customer_uid.isEmptyOrNil {
-			Utils.logger("primary_customer_uid is required for secondary customers")
-			throw HTTPServiceError.invalidBodyParameters
+			throw HTTPServiceError.invalidBodyParameters(description: "primary_customer_uid is required for secondary customers")
 		}
 
-		let params = try? JSONEncoder().encode(body)
+		let params = try JSONEncoder().encode(body)
 		let data = try await HTTPService().doRequest(method: "POST", path: "customers", query: nil, body: params)
-		let response = try? JSONDecoder().decode(Customer.self, from: data)
+		let response = try self.decoder.decode(Customer.self, from: data!)
 
 		return response
 	}
@@ -40,12 +45,11 @@ internal struct Customers {
 	/// - Returns: Customer
 	internal func get(uid: String) async throws -> Customer? {
 		if uid == "" {
-			Utils.logger("UID is required")
-			throw HTTPServiceError.invalidQueryParameters
+			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
 		let data = try await HTTPService().doRequest(method: "GET", path: "customers/\(uid)", query: nil, body: nil)
-		let response = try? JSONDecoder().decode(Customer.self, from: data)
+		let response = try self.decoder.decode(Customer.self, from: data!)
 
 		return response
 	}
@@ -58,13 +62,12 @@ internal struct Customers {
 	/// - Returns: Customer
 	internal func update(uid: String, body: CustomerUpdateParams) async throws -> Customer? {
 		if uid == "" {
-			Utils.logger("UID is required")
-			throw HTTPServiceError.invalidQueryParameters
+			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
-		let params = try? JSONEncoder().encode(body)
+		let params = try JSONEncoder().encode(body)
 		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)", query: nil, body: params)
-		let response = try? JSONDecoder().decode(Customer.self, from: data)
+		let response = try self.decoder.decode(Customer.self, from: data!)
 		return response
 	}
 
@@ -76,11 +79,10 @@ internal struct Customers {
 	/// - Returns: Data
 	internal func delete(uid: String, body: CustomerDeleteParams) async throws -> Data? {
 		if uid == "" {
-			Utils.logger("UID is required")
-			throw HTTPServiceError.invalidQueryParameters
+			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
-		let params = try? JSONEncoder().encode(body)
+		let params = try JSONEncoder().encode(body)
 		let data = try await HTTPService().doRequest(method: "DELETE", path: "customers/\(uid)", query: nil, body: params)
 		return data
 	}
@@ -91,12 +93,11 @@ internal struct Customers {
 	/// - Returns: Customer
 	internal func confirmPIIData(uid: String) async throws -> Customer? {
 		if uid == "" {
-			Utils.logger("UID is required")
-			throw HTTPServiceError.invalidQueryParameters
+			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
 		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/identity_confirmation", query: nil, body: nil)
-		let response = try? JSONDecoder().decode(Customer.self, from: data)
+		let response = try self.decoder.decode(Customer.self, from: data!)
 		return response
 	}
 
@@ -108,13 +109,12 @@ internal struct Customers {
 	/// - Returns: Customer
 	internal func lock(uid: String, body: CustomerLockParams) async throws -> Customer? {
 		if uid == "" || body.lock_reason.isEmptyOrNil {
-			Utils.logger("UID and LockReason are required")
-			throw HTTPServiceError.invalidQueryParameters
+			throw HTTPServiceError.invalidQueryParameters(description: "UID and LockReason are required")
 		}
 
-		let params = try? JSONEncoder().encode(body)
+		let params = try JSONEncoder().encode(body)
 		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/lock", query: nil, body: params)
-		let response = try? JSONDecoder().decode(Customer.self, from: data)
+		let response = try self.decoder.decode(Customer.self, from: data!)
 		return response
 	}
 
@@ -125,13 +125,12 @@ internal struct Customers {
 	/// - Returns: Customer
 	internal func unlock(uid: String, body: CustomerLockParams) async throws -> Customer? {
 		if uid == "" {
-			Utils.logger("UID is required")
-			throw HTTPServiceError.invalidQueryParameters
+			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
-		let params = try? JSONEncoder().encode(body)
+		let params = try JSONEncoder().encode(body)
 		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/unlock", query: nil, body: params)
-		let response = try? JSONDecoder().decode(Customer.self, from: data)
+		let response = try self.decoder.decode(Customer.self, from: data!)
 		return response
 	}
 
@@ -142,14 +141,12 @@ internal struct Customers {
 	/// - Returns: Customer
 	internal func updateProfileResponses(uid: String, body: [CustomerProfileResponseParams]) async throws -> Customer? {
 		if uid == "" {
-			Utils.logger("UID is required")
-			throw HTTPServiceError.invalidQueryParameters
+			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
 		for val in body {
 			if val.profile_requirement_uid.isEmptyOrNil || (val.profile_response.isEmptyOrNil) {
-				Utils.logger("ProfileRequirementUID and ProfileResponse are required")
-				throw HTTPServiceError.invalidQueryParameters
+				throw HTTPServiceError.invalidQueryParameters(description: "ProfileRequirementUID and ProfileResponse are required")
 
 			}
 		}
@@ -160,9 +157,9 @@ internal struct Customers {
 		}
 		let bds = BodyDetails(details: body)
 
-		let params = try? JSONEncoder().encode(bds)
+		let params = try JSONEncoder().encode(bds)
 		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/update_profile_responses", query: nil, body: params)
-		let response = try? JSONDecoder().decode(Customer.self, from: data)
+		let response = try self.decoder.decode(Customer.self, from: data!)
 		return response
 	}
 }

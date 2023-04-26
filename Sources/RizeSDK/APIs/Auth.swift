@@ -36,10 +36,10 @@ internal struct Auth {
 			TokenCache.shared.token = refreshToken
 
 			let data = try await HTTPService().doRequest(method: "POST", path: "auth", query: nil, body: nil)
-			let response = try? JSONDecoder().decode(AuthToken.self, from: data)
+			let response = try JSONDecoder().decode(AuthToken.self, from: data!)
 
 			// Validate token exists
-			guard let token = response?.token else {
+			guard let token = response.token else {
 				Utils.logger("Token is nil")
 				throw AuthServiceError.nilToken
 			}

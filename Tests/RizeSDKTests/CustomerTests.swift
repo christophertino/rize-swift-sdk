@@ -15,9 +15,41 @@ final class CustomerTests: RizeSDKTests {
 				offset: 0
 			)
 			let response = try await RizeSDKTests.client?.customers.list(query: params)
-			XCTAssertNotNil(response?.count)
+			XCTAssertNotNil(response?.data)
 		} catch {
-			Utils.logger(error.localizedDescription)
+			Utils.logger("CustomerTests.testList error\n \(error)")
+		}
+	}
+
+	func testCreate() async {
+		do {
+			let params = CustomerCreateParams(
+				customer_type: "primary",
+				primary_customer_uid: "kbF5TGrmwGizQuzZ",
+				external_uid: "client-generated-id",
+				email: "olive.oyl@popeyes.com",
+				details: CustomerDetails(
+					first_name: "Olive",
+					middle_name: "Olivia",
+					last_name: "Oyl",
+					suffix: "Jr.",
+					phone: "5555551212",
+					business_name: "Oliver's Olive Emporium",
+					dob: "2000-01-01",
+					ssn: "111-22-3333",
+					address: CustomerAddress(
+						street1: "123 Abc St.",
+						street2: "Apt 2",
+						city: "Chicago",
+						state: "IL",
+						postal_code: "12345"
+					)
+				)
+			)
+			let response = try await RizeSDKTests.client?.customers.create(body: params)
+			XCTAssertNotNil(response?.details)
+		} catch {
+			Utils.logger("CustomerTests.testCreate error\n \(error)")
 		}
 	}
 }

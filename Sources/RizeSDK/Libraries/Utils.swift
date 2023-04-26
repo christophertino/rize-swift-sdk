@@ -15,7 +15,7 @@ internal struct Utils {
 		#if DEBUG
 			let dateFormatter = DateFormatter()
 			dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-			Swift.print("\(dateFormatter.string(from: Foundation.Date())) >> \(object)")
+			Swift.print("Rize SDK: \(object) at \(dateFormatter.string(from: Foundation.Date()))")
 		#endif
 	}
 }

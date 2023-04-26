@@ -8,12 +8,12 @@ import Foundation
 
 /// Custom error for HTTPService
 public enum HTTPServiceError: Error {
-	case apiError
-	case decodeError
-	case invalidEndpoint
-	case invalidResponse
-	case invalidQueryParameters
-	case invalidBodyParameters
+	case apiError(description: String?)
+	case jsonDecoderError(description: String?)
+	case invalidEndpoint(description: String?)
+	case invalidResponse(description: String?)
+	case invalidQueryParameters(description: String?)
+	case invalidBodyParameters(description: String?)
 }
 
 /// Default API error type
@@ -36,7 +36,7 @@ internal struct ErrorDetails: Decodable {
 /// Provides methods for making HTTP requests
 internal struct HTTPService {
 	/// Make the API request and return response data
-	internal func doRequest(method: String, path: String, query: [URLQueryItem]?, body: Data?) async throws -> Data {
+	internal func doRequest(method: String, path: String, query: [URLQueryItem]?, body: Data?) async throws -> Data? {
 		// Check for valid auth token and refresh if necessary
 		if path != "auth" {
 			_ = try await Auth().getToken()
@@ -69,9 +69,11 @@ internal struct HTTPService {
 
 		let (data, response) = try await URLSession.shared.data(for: request)
 		guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode >= 200, httpResponse.statusCode < 400 else {
-			let err = try? JSONDecoder().decode(RizeAPIError.self, from: data)
-			Utils.logger("doRequest error response:\n \(String(describing: err))")
-			throw HTTPServiceError.invalidResponse
+			guard let err = try? JSONDecoder().decode(RizeAPIError.self, from: data) else {
+				// Error format does not match RizeAPIError
+				throw HTTPServiceError.invalidEndpoint(description: String(data: data, encoding: String.Encoding.utf8))
+			}
+			throw HTTPServiceError.invalidResponse(description: "\(err)")
 		}
 
 		return data

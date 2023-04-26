@@ -6,5 +6,5 @@
 
 /// AuthToken is the response format received when fetching an Auth token
 public struct AuthToken: Decodable {
-	let token: String
+	let token: String?
 }

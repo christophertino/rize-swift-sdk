@@ -13,7 +13,7 @@ final class AuthTests: RizeSDKTests {
 			let response = try await RizeSDKTests.client?.auth.getToken()
 			XCTAssertNotNil(response?.token)
 		} catch {
-			Utils.logger(error.localizedDescription)
+			Utils.logger("AuthTests.testGetToken error\n \(error)")
 		}
 	}
 }
