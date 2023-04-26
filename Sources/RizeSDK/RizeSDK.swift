@@ -15,7 +15,7 @@ public struct RizeSDK {
 	public init(config: RizeConfig) {
 		RizeSDK.config = config
 
-		Utils.logger("Creating client...")
+		Utils.logger("Creating client")
 
 		// Initialize API Services
 		self.auth = Auth()

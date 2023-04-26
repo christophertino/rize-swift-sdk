@@ -2,6 +2,6 @@ services:
   prism:
     image: stoplight/prism:4
     container_name: rize-mock-api
-    command: 'mock -d -h 0.0.0.0 https://cdn.rizefs.com/web-content/openapi/rize_external.yaml --errors true'
+    command: 'mock -d -h 0.0.0.0 -v debug https://cdn.rizefs.com/web-content/openapi/rize_external.yaml --errors true'
     ports:
       - '4010:4010'

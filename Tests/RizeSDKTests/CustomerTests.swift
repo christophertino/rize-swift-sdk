@@ -11,7 +11,21 @@ final class CustomerTests: RizeSDKTests {
 	func testList() async {
 		do {
 			let params = CustomerListParams(
-				limit: 20,
+				uid: "uKxmLxUEiSj5h4M3",
+				status: "identity_verified",
+				kyc_status: "denied",
+				customer_type: "primary",
+				first_name: "Olive",
+				last_name: "Oyl",
+				email: "olive.oyl@popeyes.com",
+				program_uid: "pQtTCSXz57fuefzp",
+				business_name: "Business inc",
+				external_uid: "client-generated-id",
+				pool_uid: "wTSMX1GubP21ev2h",
+				sort: "first_name_asc",
+				locked: false,
+				include_initiated: true,
+				limit: 100,
 				offset: 0
 			)
 			let response = try await RizeSDKTests.client?.customers.list(query: params)

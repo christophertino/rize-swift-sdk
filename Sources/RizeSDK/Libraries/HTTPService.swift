@@ -60,6 +60,7 @@ internal struct HTTPService {
 			components.host = "0.0.0.0"
 			components.port = 4010
 			components.path = String(format: "/%@", path)
+			Utils.logger("Request url: \(components.url!)")
 		}
 
 		var request = URLRequest(url: components.url!)

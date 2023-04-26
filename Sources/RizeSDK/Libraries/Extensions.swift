@@ -18,9 +18,21 @@ internal extension Encodable {
 		guard let data = try? JSONEncoder().encode(self) else {
 			return nil
 		}
-		return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap {
-			$0 as? [String: Any?]
-		}
+		// Serialize to dictionary
+		let dict = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any?]
+		// Make sure that Bool values are true/false instead of 0/1
+		return dict?.reduce(into: [String: Any?](), { (result, item) in
+			if let num = dict?[item.key] as? NSNumber {
+				switch CFGetTypeID(num as CFTypeRef) {
+					case CFBooleanGetTypeID():
+						result[item.key] = item.value as? Bool
+					default:
+						result[item.key] = item.value
+				}
+				return
+			}
+			result[item.key] = item.value
+		})
 	}
 	/// Convert encodable struct to URLQueryItem list
 	var encodeURLQueryItem: [URLQueryItem]? {

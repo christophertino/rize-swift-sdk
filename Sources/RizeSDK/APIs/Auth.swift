@@ -30,7 +30,7 @@ internal struct Auth {
 	/// - Returns: AuthToken
 	internal func getToken() async throws -> AuthToken? {
 		if TokenCache.shared.token.isEmptyOrNil || isExpired() {
-			Utils.logger("Token is expired or does not exist. Fetching new token...")
+			Utils.logger("Token is expired or does not exist. Fetching new token.")
 
 			let refreshToken = try buildRefreshToken()
 			TokenCache.shared.token = refreshToken
