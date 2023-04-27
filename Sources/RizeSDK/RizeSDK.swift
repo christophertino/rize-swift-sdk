@@ -10,6 +10,7 @@ import Foundation
 public struct RizeSDK {
 	internal private(set) static var config: RizeConfig?
 	internal var auth: Auth
+	internal var complianceWorkflow: ComplianceWorkflow
 	internal var customers: Customers
 
 	public init(config: RizeConfig) {
@@ -19,6 +20,7 @@ public struct RizeSDK {
 
 		// Initialize API Services
 		self.auth = Auth()
+		self.complianceWorkflow = ComplianceWorkflow()
 		self.customers = Customers()
 	}
 }

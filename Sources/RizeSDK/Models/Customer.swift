@@ -1,5 +1,5 @@
 //
-// Customer
+// Customer Model
 //
 // Copyright 2023-Present Rize Money, Inc. All rights reserved.
 //
@@ -9,7 +9,7 @@ import Foundation
 
 /// Default 'List' endpoint response.
 public struct CustomerList: Decodable {
-	let total_count, count, limit, offset: Int
+	let total_count, count, limit, offset: Int?
 	let data: [Customer]?
 }
 

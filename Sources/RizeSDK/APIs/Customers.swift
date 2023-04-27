@@ -45,7 +45,7 @@ internal struct Customers {
 	/// - Throws: HTTPServiceError
 	/// - Returns: Customer
 	internal func get(uid: String) async throws -> Customer? {
-		if uid == "" {
+		if uid.isEmpty {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
@@ -63,7 +63,7 @@ internal struct Customers {
 	/// - Throws: HTTPServiceError
 	/// - Returns: Customer
 	internal func update(uid: String, body: CustomerUpdateParams) async throws -> Customer? {
-		if uid == "" {
+		if uid.isEmpty {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
@@ -81,7 +81,7 @@ internal struct Customers {
 	/// - Throws: HTTPServiceError
 	/// - Returns: HTTPURLResponse
 	internal func delete(uid: String, body: CustomerDeleteParams) async throws -> HTTPURLResponse? {
-		if uid == "" {
+		if uid.isEmpty {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
@@ -97,7 +97,7 @@ internal struct Customers {
 	/// - Throws: HTTPServiceError
 	/// - Returns: Customer
 	internal func confirmPIIData(uid: String) async throws -> Customer? {
-		if uid == "" {
+		if uid.isEmpty {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
@@ -114,7 +114,7 @@ internal struct Customers {
 	/// - Throws: HTTPServiceError
 	/// - Returns: Customer
 	internal func lock(uid: String, body: CustomerLockParams) async throws -> Customer? {
-		if uid == "" || body.lock_reason.isEmptyOrNil {
+		if uid.isEmpty || body.lock_reason.isEmptyOrNil {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID and LockReason are required")
 		}
 
@@ -131,7 +131,7 @@ internal struct Customers {
 	///   - query: CustomerLockParams
 	/// - Returns: Customer
 	internal func unlock(uid: String, body: CustomerLockParams) async throws -> Customer? {
-		if uid == "" {
+		if uid.isEmpty {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
@@ -148,7 +148,7 @@ internal struct Customers {
 	///   - query: CustomerProfileResponseParams
 	/// - Returns: Customer
 	internal func updateProfileResponses(uid: String, body: [CustomerProfileResponseParams]) async throws -> Customer? {
-		if uid == "" {
+		if uid.isEmpty {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
