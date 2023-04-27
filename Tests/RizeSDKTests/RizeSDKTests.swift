@@ -23,6 +23,6 @@ internal class RizeSDKTests: XCTestCase {
 			Utils.logger("RizeConfig error: \(error)")
 		}
 
-		client = RizeSDK(config: self.config!)
+		self.client = RizeSDK(config: self.config!)
 	}
 }

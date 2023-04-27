@@ -18,9 +18,10 @@ internal struct Customers {
 	/// - Returns: CustomerList
 	internal func list(query: CustomerListParams) async throws -> CustomerList? {
 		let params = query.encodeURLQueryItem
-		let data = try await HTTPService().doRequest(method: "GET", path: "customers", query: params, body: nil)
-		let response = try self.decoder.decode(CustomerList.self, from: data!)
-		return response
+		guard let (_, data) = try await HTTPService().doRequest(method: "GET", path: "customers", query: params, body: nil) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(CustomerList.self, from: data)
 	}
 
 	/// Used to initialize a new Customer with an email and external_uid
@@ -33,10 +34,10 @@ internal struct Customers {
 		}
 
 		let params = try JSONEncoder().encode(body)
-		let data = try await HTTPService().doRequest(method: "POST", path: "customers", query: nil, body: params)
-		let response = try self.decoder.decode(Customer.self, from: data!)
-
-		return response
+		guard let (_, data) = try await HTTPService().doRequest(method: "POST", path: "customers", query: nil, body: params) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(Customer.self, from: data)
 	}
 
 	/// Retrieves overall status about a Customer as well as their total Asset Balances across all accounts
@@ -48,10 +49,11 @@ internal struct Customers {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
-		let data = try await HTTPService().doRequest(method: "GET", path: "customers/\(uid)", query: nil, body: nil)
-		let response = try self.decoder.decode(Customer.self, from: data!)
+		guard let (_, data) = try await HTTPService().doRequest(method: "GET", path: "customers/\(uid)", query: nil, body: nil) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(Customer.self, from: data)
 
-		return response
 	}
 
 	///  Submit or update a Customer's personally identifiable information (PII) after they are created
@@ -66,9 +68,10 @@ internal struct Customers {
 		}
 
 		let params = try JSONEncoder().encode(body)
-		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)", query: nil, body: params)
-		let response = try self.decoder.decode(Customer.self, from: data!)
-		return response
+		guard let (_, data) = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)", query: nil, body: params) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(Customer.self, from: data)
 	}
 
 	/// Archive a Customer
@@ -76,15 +79,17 @@ internal struct Customers {
 	///   - uid: Customer UID
 	///   - query: CustomerDeleteParams
 	/// - Throws: HTTPServiceError
-	/// - Returns: Data
-	internal func delete(uid: String, body: CustomerDeleteParams) async throws -> Data? {
+	/// - Returns: HTTPURLResponse
+	internal func delete(uid: String, body: CustomerDeleteParams) async throws -> HTTPURLResponse? {
 		if uid == "" {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
 		let params = try JSONEncoder().encode(body)
-		let data = try await HTTPService().doRequest(method: "DELETE", path: "customers/\(uid)", query: nil, body: params)
-		return data
+		guard let (response, _) = try await HTTPService().doRequest(method: "DELETE", path: "customers/\(uid)", query: nil, body: params) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return response
 	}
 
 	/// Used to explicitly confirm a Customer's PII data is up-to-date in order to add additional products
@@ -96,9 +101,10 @@ internal struct Customers {
 			throw HTTPServiceError.invalidQueryParameters(description: "UID is required")
 		}
 
-		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/identity_confirmation", query: nil, body: nil)
-		let response = try self.decoder.decode(Customer.self, from: data!)
-		return response
+		guard let (_, data) = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/identity_confirmation", query: nil, body: nil) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(Customer.self, from: data)
 	}
 
 	/// Freeze all activities relating to the Customer
@@ -113,9 +119,10 @@ internal struct Customers {
 		}
 
 		let params = try JSONEncoder().encode(body)
-		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/lock", query: nil, body: params)
-		let response = try self.decoder.decode(Customer.self, from: data!)
-		return response
+		guard let (_, data) = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/lock", query: nil, body: params) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(Customer.self, from: data)
 	}
 
 	/// Remove the Customer lock, returning their state to normal
@@ -129,9 +136,10 @@ internal struct Customers {
 		}
 
 		let params = try JSONEncoder().encode(body)
-		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/unlock", query: nil, body: params)
-		let response = try self.decoder.decode(Customer.self, from: data!)
-		return response
+		guard let (_, data) = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/unlock", query: nil, body: params) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(Customer.self, from: data)
 	}
 
 	/// UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements.. For most cases, use CustomerProfileResponseItem.Response to submit a string response. For ordered list type responses, use CustomerProfileResponseItem.Num0/1/2
@@ -158,8 +166,9 @@ internal struct Customers {
 		let bds = BodyDetails(details: body)
 
 		let params = try JSONEncoder().encode(bds)
-		let data = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/update_profile_responses", query: nil, body: params)
-		let response = try self.decoder.decode(Customer.self, from: data!)
-		return response
+		guard let (_, data) = try await HTTPService().doRequest(method: "PUT", path: "customers/\(uid)/update_profile_responses", query: nil, body: params) as? (HTTPURLResponse, Data) else {
+			return nil
+		}
+		return try self.decoder.decode(Customer.self, from: data)
 	}
 }

@@ -35,8 +35,10 @@ internal struct Auth {
 			let refreshToken = try buildRefreshToken()
 			TokenCache.shared.token = refreshToken
 
-			let data = try await HTTPService().doRequest(method: "POST", path: "auth", query: nil, body: nil)
-			let response = try JSONDecoder().decode(AuthToken.self, from: data!)
+			guard let (_, data) = try await HTTPService().doRequest(method: "POST", path: "auth", query: nil, body: nil) as? (HTTPURLResponse, Data) else {
+				return nil
+			}
+			let response = try JSONDecoder().decode(AuthToken.self, from: data)
 
 			// Validate token exists
 			guard let token = response.token else {
@@ -49,7 +51,7 @@ internal struct Auth {
 			TokenCache.shared.timestamp = Int64(Date().timeIntervalSince1970)
 			return response
 		}
-		return AuthToken(token: TokenCache.shared.token!)
+		return AuthToken(token: TokenCache.shared.token)
 	}
 
 	/// Generates a JWT refresh token

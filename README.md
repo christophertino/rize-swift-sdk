@@ -46,13 +46,19 @@ import RizeSDK
 
 struct Rize {
 	static var client: RizeSDK?
-	static var config = RizeConfig(
-		programUID: "PROGRAM_UID",
-		hmacKey: "HMAC_KEY",
-		environment: "sandbox"
-	)
+	static var config: RizeConfig?
+
 	init() {
-		client = RizeSDK(config: config)
+		self.config = try? RizeConfig(
+			programUID: "PROGRAM_UID",
+			hmacKey: "HMAC_KEY",
+			environment: RizeEnvironments.sandbox
+		)
+		self.client = RizeSDK(config: self.config!)
+	}
+
+	func getCustomer(uid: String) async -> Customer? {
+		let customer = try? await RizeSDK.client?.customers.get(uid: uid)
 	}
 }
 ```

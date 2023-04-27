@@ -10,6 +10,7 @@ import Foundation
 public enum HTTPServiceError: Error {
 	case apiError(description: String?)
 	case jsonDecoderError(description: String?)
+	case invalidURL(description: String?)
 	case invalidEndpoint(description: String?)
 	case invalidResponse(description: String?)
 	case invalidQueryParameters(description: String?)
@@ -36,7 +37,7 @@ internal struct ErrorDetails: Decodable {
 /// Provides methods for making HTTP requests
 internal struct HTTPService {
 	/// Make the API request and return response data
-	internal func doRequest(method: String, path: String, query: [URLQueryItem]?, body: Data?) async throws -> Data? {
+	internal func doRequest(method: String, path: String, query: [URLQueryItem]?, body: Data?) async throws -> (HTTPURLResponse?, Data?) {
 		// Check for valid auth token and refresh if necessary
 		if path != "auth" {
 			_ = try await Auth().getToken()
@@ -63,7 +64,10 @@ internal struct HTTPService {
 			Utils.logger("Request url: \(components.url!)")
 		}
 
-		var request = URLRequest(url: components.url!)
+		guard let url = components.url else{
+			throw HTTPServiceError.invalidURL(description: "Invalid URLComponents.url")
+		}
+		var request = URLRequest(url: url)
 		request.httpMethod = method
 		request.allHTTPHeaderFields = headers
 		request.httpBody = body
@@ -77,6 +81,6 @@ internal struct HTTPService {
 			throw HTTPServiceError.invalidResponse(description: "\(err)")
 		}
 
-		return data
+		return (response as? HTTPURLResponse, data)
 	}
 }
