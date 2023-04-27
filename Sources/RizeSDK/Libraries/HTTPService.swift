@@ -64,7 +64,7 @@ internal struct HTTPService {
 			Utils.logger("Request url: \(components.url!)")
 		}
 
-		guard let url = components.url else{
+		guard let url = components.url else {
 			throw HTTPServiceError.invalidURL(description: "Invalid URLComponents.url")
 		}
 		var request = URLRequest(url: url)

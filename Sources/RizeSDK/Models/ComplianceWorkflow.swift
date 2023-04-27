@@ -87,9 +87,9 @@ public struct WorkflowCreateParams: Encodable {
 /// WorkflowDocumentParams are the body params used when acknowledging a compliance document
 public struct WorkflowDocumentParams: Encodable {
 	let accept, document_uid: String
-	let ip_address,
-		user_name,
-		customer_uid: String? /// Required for AcknowledgeDocument but omitted for BatchAcknowledgeDocuments
+	var ip_address: String? = nil
+	var user_name: String? = nil
+	var customer_uid: String? = nil /// Required for AcknowledgeDocument but omitted for BatchAcknowledgeDocuments
 }
 
 /// WorkflowBatchDocumentsParams are the body params used when acknowledging multiple compliance documents
