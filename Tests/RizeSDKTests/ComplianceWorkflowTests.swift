@@ -1,6 +1,5 @@
 //
 // Compliance Workflow Tests
-// 
 //
 // Copyright 2023-Present Rize Money, Inc. All rights reserved.
 //
@@ -78,7 +77,7 @@ final class ComplianceWorkflowTests: RizeSDKTests {
 					ip_address: "107.56.230.156",
 					user_name: "gilbert chesterton",
 					customer_uid: "h9MzupcjtA3LPW2e"
-				),WorkflowDocumentParams(
+				), WorkflowDocumentParams(
 					accept: "yes",
 					document_uid: "Yqyjk5b2xgQ9FrxS",
 					customer_uid: "h9MzupcjtA3LPW2e"
