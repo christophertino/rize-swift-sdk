@@ -79,7 +79,7 @@ public struct TransactionEvent: Decodable {
 }
 
 /// TransactionEventListParams builds the query parameters used in querying TransactionEvents
-public struct TransactionEventListParams: Decodable {
+public struct TransactionEventListParams: Encodable {
 	var source_custodial_account_uid: String? = nil
 	var destination_custodial_account_uid: String? = nil
 	var custodial_account_uid: String? = nil
@@ -116,7 +116,7 @@ public struct SyntheticLineItem: Decodable {
 }
 
 /// SyntheticLineItemListParams builds the query parameters used in querying SyntheticLineItems
-public struct SyntheticLineItemListParams: Decodable {
+public struct SyntheticLineItemListParams: Encodable {
 	var customer_uid: String? = nil
 	var pool_uid: String? = nil
 	var synthetic_account_uid: String? = nil
@@ -154,7 +154,7 @@ public struct CustodialLineItem: Decodable {
 }
 
 /// CustodialLineItemListParams builds the query parameters used in querying CustodialLineItems
-public struct CustodialLineItemListParams: Decodable {
+public struct CustodialLineItemListParams: Encodable {
 	var customer_uid: String? = nil
 	var custodial_account_uid: String? = nil
 	var status: String? = nil
