@@ -14,7 +14,7 @@ public struct AdjustmentList: Decodable {
 }
 
 /// AdjustmentTypeList is an API response containing a list of Adjustments Types
-public struct  AdjustmentTypeList: Decodable {
+public struct AdjustmentTypeList: Decodable {
 	let total_count, count, limit, offset: Int?
 	let data: [AdjustmentType]?
 }

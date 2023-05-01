@@ -7,36 +7,36 @@
 
 import Foundation
 
-/// WorkflowList is an API response containing a list of Compliance Workflows
-public struct WorkflowList: Decodable {
+/// ComplianceWorkflowList is an API response containing a list of Compliance Workflows
+public struct ComplianceWorkflowList: Decodable {
 	let total_count, count, limit, offset: Int?
-	let data: [Workflow]?
+	let data: [ComplianceWorkflow]?
 }
 
-/// Workflow data type
-public struct Workflow: Decodable {
+/// ComplianceWorkflow data type
+public struct ComplianceWorkflow: Decodable {
 	let uid, product_uid, product_compliance_plan_uid: String?
-	let summary: WorkflowSummary?
-	let customer: WorkflowCustomer?
-	let accepted_documents: [WorkflowAcceptedDocument]?
-	let current_step_documents_pending: [WorkflowPendingDocument]?
-	let all_documents: [WorkflowDocument]?
+	let summary: ComplianceWorkflowSummary?
+	let customer: ComplianceWorkflowCustomer?
+	let accepted_documents: [ComplianceWorkflowAcceptedDocument]?
+	let current_step_documents_pending: [ComplianceWorkflowPendingDocument]?
+	let all_documents: [ComplianceWorkflowDocument]?
 }
 
-/// WorkflowSummary contains a status summary of the Compliance Workflow
-public struct WorkflowSummary: Decodable {
+/// ComplianceWorkflowSummary contains a status summary of the Compliance Workflow
+public struct ComplianceWorkflowSummary: Decodable {
 	let accepted_quantity, completed_step, current_step: Int?
 	let begun_at: Date?
 	let status: String?
 }
 
-/// WorkflowCustomer contains Customer information related to this Compliance Workflow
-public struct WorkflowCustomer: Decodable {
+/// ComplianceWorkflowCustomer contains Customer information related to this Compliance Workflow
+public struct ComplianceWorkflowCustomer: Decodable {
 	let email, external_uid, uid: String?
 }
 
-/// WorkflowAcceptedDocument contains information about accepted Compliance Workflow documents
-public struct WorkflowAcceptedDocument: Decodable {
+/// ComplianceWorkflowAcceptedDocument contains information about accepted Compliance Workflow documents
+public struct ComplianceWorkflowAcceptedDocument: Decodable {
 	let electronic_signature_required,
 		external_storage_name,
 		compliance_document_url,
@@ -46,8 +46,8 @@ public struct WorkflowAcceptedDocument: Decodable {
 	let accepted_at: Date?
 }
 
-/// WorkflowPendingDocument contains information about pending Compliance Workflow documents
-public struct WorkflowPendingDocument: Decodable {
+/// ComplianceWorkflowPendingDocument contains information about pending Compliance Workflow documents
+public struct ComplianceWorkflowPendingDocument: Decodable {
 	let electronic_signature_required,
 		external_storage_name,
 		compliance_document_url,
@@ -56,8 +56,8 @@ public struct WorkflowPendingDocument: Decodable {
 	let step, version: Int?
 }
 
-/// WorkflowDocument contains information about all Compliance Workflow documents
-public struct WorkflowDocument: Decodable {
+/// ComplianceWorkflowDocument contains information about all Compliance Workflow documents
+public struct ComplianceWorkflowDocument: Decodable {
 	let electronic_signature_required,
 		external_storage_name,
 		compliance_document_url,
@@ -65,8 +65,8 @@ public struct WorkflowDocument: Decodable {
 	let step, version: Int?
 }
 
-/// WorkflowListParams builds the query parameters used in querying Compliance Workflows
-public struct WorkflowListParams: Encodable {
+/// ComplianceWorkflowListParams builds the query parameters used in querying Compliance Workflows
+public struct ComplianceWorkflowListParams: Encodable {
 	var customer_uid: String? = nil
 	var product_uid: String? = nil
 	var in_progress: Bool? = nil
@@ -74,28 +74,28 @@ public struct WorkflowListParams: Encodable {
 	var offset: Int? = nil
 }
 
-/// WorkflowLatestParams builds the query parameters used in querying the latest Compliance Workflow for a customer
-public struct WorkflowLatestParams: Encodable {
+/// ComplianceWorkflowLatestParams builds the query parameters used in querying the latest Compliance Workflow for a customer
+public struct ComplianceWorkflowLatestParams: Encodable {
 	var product_compliance_plan_uid: String? = nil
 }
 
-/// WorkflowCreateParams are the body params used when creating a new Compliance Workflow
-public struct WorkflowCreateParams: Encodable {
+/// ComplianceWorkflowCreateParams are the body params used when creating a new Compliance Workflow
+public struct ComplianceWorkflowCreateParams: Encodable {
 	let customer_uid, product_compliance_plan_uid: String
 }
 
-/// WorkflowDocumentParams are the body params used when acknowledging a compliance document
-public struct WorkflowDocumentParams: Encodable {
+/// ComplianceWorkflowDocumentParams are the body params used when acknowledging a compliance document
+public struct ComplianceWorkflowDocumentParams: Encodable {
 	let accept, document_uid: String
 	var ip_address: String? = nil
 	var user_name: String? = nil
 	var customer_uid: String? = nil /// Required for AcknowledgeDocument but omitted for BatchAcknowledgeDocuments
 }
 
-/// WorkflowBatchDocumentsParams are the body params used when acknowledging multiple compliance documents
-public struct WorkflowBatchDocumentsParams: Encodable {
+/// ComplianceWorkflowBatchDocumentsParams are the body params used when acknowledging multiple compliance documents
+public struct ComplianceWorkflowBatchDocumentsParams: Encodable {
 	let customer_uid: String
-	let documents: [WorkflowDocumentParams]
+	let documents: [ComplianceWorkflowDocumentParams]
 }
 
 // swiftlint:enable identifier_name redundant_optional_initialization
