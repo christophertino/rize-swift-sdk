@@ -53,7 +53,6 @@ internal struct Customers {
 			return nil
 		}
 		return try self.decoder.decode(Customer.self, from: data)
-
 	}
 
 	///  Submit or update a Customer's personally identifiable information (PII) after they are created

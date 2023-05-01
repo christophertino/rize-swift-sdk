@@ -29,7 +29,7 @@ public struct KYCDocument: Decodable {
 
 /// KYCDocumentListParams builds the query parameters used in querying KYCDocuments
 public struct KYCDocumentListParams: Encodable {
-	var evaluation_uid: String? = nil
+	let evaluation_uid: String
 }
 
 /// KYCDocumentUploadParams are the body params used when uploading a new KYC Document
