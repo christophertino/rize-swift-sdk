@@ -66,7 +66,7 @@ public struct WorkflowDocument: Decodable {
 }
 
 /// WorkflowListParams builds the query parameters used in querying Compliance Workflows
-public struct WorkflowListParams: Codable {
+public struct WorkflowListParams: Encodable {
 	var customer_uid: String? = nil
 	var product_uid: String? = nil
 	var in_progress: Bool? = nil
@@ -75,7 +75,7 @@ public struct WorkflowListParams: Codable {
 }
 
 /// WorkflowLatestParams builds the query parameters used in querying the latest Compliance Workflow for a customer
-public struct WorkflowLatestParams: Codable {
+public struct WorkflowLatestParams: Encodable {
 	var product_compliance_plan_uid: String? = nil
 }
 

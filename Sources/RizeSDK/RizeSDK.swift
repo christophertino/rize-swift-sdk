@@ -11,6 +11,7 @@ public struct RizeSDK {
 	internal private(set) static var config: RizeConfig?
 	internal var adjustments: Adjustments
 	internal var auth: Auth
+	internal var cardArtworks: CardArtworks
 	internal var complianceWorkflow: ComplianceWorkflow
 	internal var customers: Customers
 
@@ -22,6 +23,7 @@ public struct RizeSDK {
 		// Initialize API Services
 		self.adjustments = Adjustments()
 		self.auth = Auth()
+		self.cardArtworks = CardArtworks()
 		self.complianceWorkflow = ComplianceWorkflow()
 		self.customers = Customers()
 	}

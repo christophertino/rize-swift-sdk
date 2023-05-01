@@ -58,7 +58,7 @@ public struct CustomerAddress: Codable {
 }
 
 /// CustomerProfileResponse contains Profile Response info
-public struct CustomerProfileResponse: Codable {
+public struct CustomerProfileResponse: Decodable {
 	var profile_requirement: String? = nil
 	var	profile_requirement_uid: String? = nil
 	var	profile_response: String? = nil
