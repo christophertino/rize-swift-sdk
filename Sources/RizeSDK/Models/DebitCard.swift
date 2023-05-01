@@ -42,7 +42,7 @@ public struct DebitCardShippingAddress: Codable {
 }
 
 /// DebitCardAccessToken contains the token necessary to retrieve a virtual Debit Card image.
-public struct DebitCardAccessToken: Encodable {
+public struct DebitCardAccessToken: Decodable {
 	let token, config_id: String
 }
 
