@@ -88,7 +88,9 @@ fi
 
 The SDK uses [Prism](https://docs.stoplight.io/docs/prism) as a mock server for validation testing. You must start the Docker container before running the SDK tests.
 
-`docker compose up`
+```sh
+$ docker compose up
+```
 
 ## Documentation
 
