@@ -20,7 +20,7 @@ public struct AdjustmentTypeList: Decodable {
 }
 
 /// Adjustment data type
-public struct Adjustment: Decodable{
+public struct Adjustment: Decodable {
 	let uid,
 		external_uid,
 		customer_uid,

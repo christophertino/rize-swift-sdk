@@ -3,7 +3,7 @@
 //
 // Copyright 2023-Present Rize Money, Inc. All rights reserved.
 //
-// swiftlint:disable identifier_name redundant_optional_initialization
+// swiftlint:disable identifier_name redundant_optional_initialization inclusive_language
 
 import Foundation
 
@@ -98,4 +98,4 @@ public struct SyntheticAccountTypeListParams: Encodable {
 	var offset: Int? = nil
 }
 
-// swiftlint:enable identifier_name redundant_optional_initialization
+// swiftlint:enable identifier_name redundant_optional_initialization inclusive_language

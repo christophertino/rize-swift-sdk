@@ -31,7 +31,7 @@ internal struct Transfers {
 		if body.source_synthetic_account_uid.isEmpty ||
 			body.destination_synthetic_account_uid.isEmpty ||
 			body.initiating_customer_uid.isEmpty ||
-			body.usd_transfer_amount.isEmpty  {
+			body.usd_transfer_amount.isEmpty {
 			throw HTTPServiceError.invalidBodyParameters(description: "source_synthetic_account_uid, destination_synthetic_account_uid, initiating_customer_uid and usd_transfer_amount are required")
 		}
 
